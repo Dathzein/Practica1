@@ -18,6 +18,7 @@ namespace BancoGeneral.Yappy
             [FromQuery] string domain,
             [FromQuery] string confirmationNumber)
         {
+            
 
             if (BGFirma.VerifyParams(orderId, status, domain, hash))
             {

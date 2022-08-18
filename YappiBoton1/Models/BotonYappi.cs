@@ -19,10 +19,5 @@ namespace YappiBoton1.Models
         public string Telefono { get; set; }
     }
 
-    public class ErrorEx
-    {
-        public int CodigoError { get; set; }
-        public string MensajeError { get; set; }
-
-    }
+    
 }

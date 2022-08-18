@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 using YappiBoton1.Models;
@@ -14,15 +16,17 @@ namespace YappiBoton1.Controllers
     [ApiController]
     public class BotonOneController : ControllerBase
     {
+
+        
+
         [HttpPost]
-        public UrlResponse EnviarDatos([FromBody]BotonYappi yappi)
+        public UrlResponse EnviarDatos(BotonYappi yappi)
         {
            
             
             try
             {
-                
-                    var bfFirma = new BGFirma(
+                var bfFirma = new BGFirma(
                     domain: yappi.Domain,
                     total: yappi.Total,
                     subtotal: yappi.SubTotal,
@@ -35,17 +39,42 @@ namespace YappiBoton1.Controllers
                     tel: yappi.Telefono
                     );
 
-                    var yappyPayment = bfFirma.GenerateURL();
+                var yappyPayment = bfFirma.GenerateURL();
+
+                if (!yappyPayment.success)
+                {
 
                     return yappyPayment;
+                }
+                else
+                {
+                    //WebHook
+                    return yappyPayment;
+                }
                 
                 
-
             }
             catch(Exception ex)
             {
                 throw new Exception("Revisar: ", ex);
             }
+        }
+
+        public static List<string> pruebaWebHook(string url)
+        {
+            List<string> json = null;
+            url.Trim();
+            json.Add(url);
+            return json;
+            //var wr = WebRequest.Create(url);
+            //wr.ContentType = "application/json";
+            //wr.Method = "post";
+            //using (var sw = new StreamWriter(wr.GetRequestStream()))
+            //{
+            //    sw.write(json);
+            //}
+            //wr.getresponse();
+            //return yappyPayment;
         }
     }
 }
